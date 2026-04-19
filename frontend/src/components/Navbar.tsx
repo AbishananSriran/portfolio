@@ -2,6 +2,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import portfolioImg from "../assets/portfolio-website.png";
 
 const Navbar = ({ activeSection }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,9 +12,18 @@ const Navbar = ({ activeSection }) => {
 
       {/* LEFT */}
       <div className="flex items-center gap-3 text-foreground">
-        <a href="#" className="text-gradient text-base sm:text-lg md:text-xl font-semibold tracking-tight">
-          Abishanan Sriranjan
-        </a>
+        {/* Portfolio Image */}
+        <div className="flex flex-row gap-1 items-center">
+          <img
+            src={portfolioImg}
+            alt="Portfolio"
+            className="w-5 h-5 sm:w-8 sm:h-8 rounded-md object-cover"
+          />
+
+          <a href="#" className="text-gradient text-base sm:text-lg md:text-xl font-semibold tracking-tight">
+            Abishanan Sriranjan
+          </a>
+        </div>
 
         <div className="hidden md:block h-5 w-px bg-white/50" />
 
