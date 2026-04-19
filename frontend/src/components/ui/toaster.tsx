@@ -56,7 +56,16 @@ export function Toaster() {
         );
       })}
 
-      <ToastViewport className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-col gap-3 w-fit z-50" />
+      <ToastViewport
+        className="
+          fixed left-1/2 -translate-x-1/2
+          bottom-[calc(1rem+env(safe-area-inset-bottom))]
+          flex flex-col gap-3
+          w-[92vw] max-w-sm
+          z-[9999]
+        "
+        style={{ top: "auto" }}
+      />
     </ToastProvider>
   );
 }
