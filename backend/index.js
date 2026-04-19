@@ -15,5 +15,5 @@ app.use("/api/contact", contactRoute);
 app.use("/api/chat", chatRoute);
 
 app.listen(3001, () => {
-  console.log("Server running on http://localhost:3001");
+  console.log("Server running on Port 3001");
 });
