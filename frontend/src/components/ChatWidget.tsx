@@ -32,6 +32,10 @@ export default function ChatWidget() {
         const extra = shuffled.slice(0, 4); // pick 4 random ones
 
         setSuggestedQuestions([PRIORITY_QUESTIONS[Math.floor(Math.random() * PRIORITY_QUESTIONS.length)], ...extra]);
+
+        if (open) {
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
     } else {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
@@ -146,7 +150,7 @@ export default function ChatWidget() {
           <div className="flex items-center justify-between p-3 bg-gradient-to-r from-cyan-300/70 via-blue-400 to-fuchsia-400/80 rounded-t-xl text-white shadow-sm">
             <div className="flex items-center gap-2">
                 <FaUserTie className="w-5 h-5" />
-                <span className="font-semibold text-sm">Abishanan Assistant</span>
+                <span className="font-semibold text-sm">Abi AI</span>
             </div>
             <button
                 onClick={() => setOpen(false)}
@@ -234,7 +238,7 @@ export default function ChatWidget() {
                         <LucideArrowUp className={`w-4 h-4${hoverSend ? ' text-blue-400' : ''}`} />
                     )}
                 </button>
-                </div>
+            </div>
         </div>
       )}
     </div>
