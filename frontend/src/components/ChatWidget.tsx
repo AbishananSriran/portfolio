@@ -253,7 +253,7 @@ export default function ChatWidget() {
     <div className="fixed bottom-6 right-6 z-50">
       {!open && (
         <div className="relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-300/ to-fuchsia-400 blur-lg opacity-70 animate-pulse" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-300 to-fuchsia-400 blur-lg opacity-70 animate-pulse" />
 
             <button
                 onClick={() => setOpen(true)}
