@@ -45,7 +45,13 @@ export function TypewriterMessage({
     return () => clearTimeout(thinkingTimeout);
   }, [text, animated]);
 
-  if (thinking) return <ThinkingDots />;
+  if (thinking || displayed.startsWith("...")) return <ThinkingDots />;
 
-  return <div className="animate-fadeIn">{displayed}</div>;
+  return (
+    <div className="animate-fadeIn">
+      {displayed.split("\n").map((line, i) => (
+        <div key={i}>{line}</div>
+      ))}
+    </div>
+  );
 }

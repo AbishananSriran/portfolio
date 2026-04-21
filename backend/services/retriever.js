@@ -1,7 +1,5 @@
-import { chunks } from "../chunks.js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-let embedModel = null;
+import { chunks } from "../chunksWithEmbeddings.js";
+import { GoogleGenAI } from "@google/genai";
 
 const cosineSimilarity = (a, b) => {
   const dot = a.reduce((sum, val, i) => sum + val * b[i], 0);
@@ -11,17 +9,19 @@ const cosineSimilarity = (a, b) => {
 };
 
 export const retrieveRelevantChunks = async (query, k = 4) => {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  console.log(embedModel)
+  const genAI = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});
 
-  if (!embedModel)
-    embedModel = genAI.getGenerativeModel({
-        model: "gemini-embedding-001",
-    });
+  const result = await genAI.models.embedContent({
+    model: "gemini-embedding-001",
+    contents: {
+      parts: [{text: query}],
+    }
+  });
 
-
-  const result = await embedModel.embedContent(query);
-  const queryEmbedding = result.embedding.values;
+  const queryEmbedding = result.embeddings?.[0]?.values;
+  if (!queryEmbedding) {
+    throw new Error("Failed to get embedding for query!");
+  }
 
   const scored = chunks.map(chunk => ({
     ...chunk,
