@@ -4,6 +4,9 @@ import { FaUserTie } from "react-icons/fa";
 import { useRef, useEffect } from "react";
 import { TypewriterMessage } from "./TypeWriterMessage";
 import { API_URL } from "@/config";
+import { useToast } from "@/hooks/use-toast"; 
+
+const ERROR_MESSAGE = "Sorry, something went wrong. Please try again later.";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -11,6 +14,8 @@ export default function ChatWidget() {
     { role: "assistant", content: "👋 Ask me anything about Abishanan!", animated: true }
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -19,8 +24,9 @@ export default function ChatWidget() {
 
 
   const sendMessage = async () => {
-    if (!input) return;
+    if (!input || loading) return;
 
+    setLoading(true);
     const userMessage = { role: "user", content: input, animated: true };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -36,45 +42,83 @@ export default function ChatWidget() {
 
     try {
         const res = await fetch(`${API_URL}/api/chat`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: input }),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: input }),
         });
 
         const data = await res.json();
 
-        // replace loading message with real response
+        if (res.ok) {
+            // replace loading message with real response
+            setMessages((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: "assistant",
+                    content: data.reply || ERROR_MESSAGE,
+                    animated: false,
+                };
+                return updated;
+            });
+        } else {
+            toast({
+                title: "Error",
+                description: "Failed to get response from assistant: " + res.statusText,
+                variant: "destructive"
+            });
+
+            setMessages((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                    role: "assistant",
+                    content: ERROR_MESSAGE,
+                    animated: false,
+                };
+                return updated;
+            });
+        }
+
+    } catch (err) {
+        toast({
+            title: "Error",
+            description: "Failed to get response from assistant: " + err.message,
+            variant: "destructive"
+        });
+
         setMessages((prev) => {
             const updated = [...prev];
             updated[updated.length - 1] = {
                 role: "assistant",
-                content: data.reply,
+                content: ERROR_MESSAGE,
                 animated: false,
             };
             return updated;
         });
-
-    } catch (err) {
-        console.error(err);
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="bg-white text-black px-4 py-2 rounded-full shadow-lg"
-        >
-          <FaUserTie className="animate-pulse w-5 h-6" />
-        </button>
+        <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-300 to-fuchsia-400 blur-lg opacity-70 animate-pulse" />
+
+            <button
+                onClick={() => setOpen(true)}
+                className="bg-white text-black px-4 py-2 rounded-full shadow-xl hover:scale-110 transition-transform duration-200"
+            >
+                <FaUserTie className="animate-pulse w-5 h-6" />
+            </button>
+        </div>
       )}
 
       {open && (
         <div className="w-80 h-96 bg-background border border-border rounded-xl flex flex-col shadow-xl">
-          <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-t-xl text-white shadow-sm">
+          <div className="flex items-center justify-between p-3 bg-gradient-to-r from-cyan-300/70 via-blue-400 to-fuchsia-400/80 rounded-t-xl text-white shadow-sm">
             <div className="flex items-center gap-2">
                 <FaUserTie className="w-5 h-5" />
                 <span className="font-semibold text-sm">Abishanan Assistant</span>
@@ -105,12 +149,14 @@ export default function ChatWidget() {
                                 <TypewriterMessage
                                     text={m.content}
                                     animated={m.animated}
-                                    onUpdate={() => bottomRef.current?.scrollIntoView({ behavior: "smooth" })}
+                                    onUpdate={() =>
+                                        bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+                                    }
                                     onDone={() => {
                                         setMessages((prev) =>
-                                        prev.map((msg, idx) =>
-                                            idx === i ? { ...msg, animated: true } : msg
-                                        )
+                                            prev.map((msg, idx) =>
+                                                idx === i ? { ...msg, animated: true } : msg
+                                            )
                                         );
                                     }}
                                 />
