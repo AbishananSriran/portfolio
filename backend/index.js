@@ -5,6 +5,7 @@ import express from "express";
 import cors from "cors";
 import contactRoute from "./routes/contact.js";
 import chatRoute from "./routes/chat.js";
+import serverless from "serverless-http";
 
 const app = express();
 
@@ -14,6 +15,14 @@ app.use(express.json());
 app.use("/api/contact", contactRoute);
 app.use("/api/chat", chatRoute);
 
-app.listen(3001, () => {
-  console.log("Server running on Port 3001");
+app.get("/", (req, res) => {
+  res.send("API running");
 });
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(3001, () => {
+    console.log("Server running on port 3001");
+  });
+}
+
+export const handler = serverless(app);
