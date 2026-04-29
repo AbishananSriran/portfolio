@@ -647,7 +647,11 @@ const Index = () => {
                         }
                       } catch (err) {
                         console.error(err);
-                        alert("An unexpected error occurred");
+                        toast({
+                          title: "Error",
+                          description: "Failed to send message: " + err.toString(),
+                          variant: "destructive",
+                        });
                       }
                     }}
                   >
