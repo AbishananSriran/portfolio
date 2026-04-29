@@ -10,7 +10,7 @@ This is a modern, interactive portfolio website for Abishanan, showcasing his pr
 - **Responsive Design**: Optimized for all devices with smooth animations and particle collision simulations.
 - **Backend API**: A Node.js Express server handling chat responses, contact form submissions and email notifications.
 
-The backend leverages Google Gemini for AI responses, Resend for email services and reCAPTCHA for spam protection, ensuring a robust and secure user experience.
+The backend leverages Google Gemini for AI responses, Resend for email services and reCAPTCHA for spam protection, all hosted via AWS API Gateway + Lambda, ensuring a robust and secure user experience.
 
 ## Tech Stack
 
@@ -48,7 +48,7 @@ The backend leverages Google Gemini for AI responses, Resend for email services 
 1. Install dependencies:
 
    ```bash
-   npm install
+   npm ci
    ```
 
 1. Create a `.env` file in the `backend` directory with the following environment variables:
@@ -100,11 +100,11 @@ The backend leverages Google Gemini for AI responses, Resend for email services 
 ## Usage
 
 - Open your browser and navigate to `http://localhost:8080` to view the portfolio.
-- The backend API endpoints are available at `http://localhost:3001/api/*`.
+- The backend API endpoints are available at `http://localhost:3001/api/*`. Health check can be done via a `GET` request to `localhost:3001/`.
 - Use the chat widget to interact with the AI assistant.
 - Submit the contact form to send messages (requires valid reCAPTCHA).
 
-## Build for Production
+## Deploy for Production
 
 ### Frontend Build
 
@@ -115,10 +115,8 @@ npm run build
 
 ### Backend Build
 
-```bash
-cd backend
-npm start
-```
+The backend is deployed to AWS Lambda via API Gateway. Commit changes, then run `backend/deploy.sh`, providing
+your AWS credentials to the `aws` CLI.
 
 ## Contributing
 
