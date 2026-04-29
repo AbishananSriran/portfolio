@@ -31,7 +31,6 @@ ${message}
     contents: prompt,
     config: {
       temperature: 0.2,
-      maxOutputTokens: 200,
     },
   });
 
