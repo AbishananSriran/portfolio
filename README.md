@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a modern, interactive portfolio website for Abishanan, showcasing his professional experience, projects and skills. The site features a sleek React-based frontend built with Vite, TypeScript and Tailwind CSS, incorporating advanced UI components from Radix UI and interactive 3D elements using React Three Fiber. Key features include:
+This is my interactive portfolio website where I showcase my professional experience, projects and skills. The site features a sleek React-based frontend built with Vite, TypeScript and Tailwind CSS, incorporating advanced UI components from Radix UI and interactive 3D elements using React Three Fiber. Key features include:
 
 - **Interactive Portfolio Sections**: Detailed experience at various companies along with featured projects.
 - **AI-Powered Chat Widget**: Intelligent chat assistant that answers questions about Abishanan using Google Gemini AI, with context retrieved from embedded knowledge chunks.
